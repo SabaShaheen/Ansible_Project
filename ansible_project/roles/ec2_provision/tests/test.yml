@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Check if security group exists
+      amazon.aws.ec2_group_info:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ region }}"
+        filters:
+          group-name: "{{ sec_group }}"
+      register: sg_info
+
+    - name: Assert security group exists
+      assert:
+        that:
+          - sg_info.security_groups | length > 0
+        fail_msg: "Security group {{ sec_group }} does not exist."
+
+    - name: Check if EC2 instance is running
+      amazon.aws.ec2_instance_info:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ region }}"
+        filters:
+          "tag:Environment": "Testing"
+          instance-state-name: running
+      register: ec2_info
+
+    - name: Assert EC2 instance is running
+      assert:
+        that:
+          - ec2_info.instances | length > 0
+        fail_msg: "No running instances found in the environment 'Testing'."
+
+    - name: Attempt SSH connection to the instance
+      ansible.builtin.wait_for:
+        host: "{{ ec2_info.instances[0].public_ip_address }}"
+        port: 22
+        state: started
+        timeout: 60
+      register: ssh_result
+
+    - name: Assert SSH connection is successful
+      assert:
+        that:
+          - ssh_result.state == 'started'
+        fail_msg: "SSH connection to the instance failed."
+
+  vars_files:
+    - "../vars/main.yml"

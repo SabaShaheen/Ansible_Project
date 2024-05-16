@@ -1,0 +1,3 @@
+- hosts: ec2
+  roles:
+    - mysql_install

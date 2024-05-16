@@ -1,0 +1,16 @@
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+[ec2]
+ec2_instance ansible_host=ec2-13-51-44-37.eu-north-1.compute.amazonaws.com ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/ansible_project/saba_key_pair.pem
+
+[DEV]
+dev ansible_host=ec2-13-51-45-38.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+
+[SIT]
+sit ansible_host=ec2-13-51-47-39.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+sit02 ansible_host=ec2-13-51-48-41.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+
+[UAT]
+uat ansible_host=ec2-13-51-49-33.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+uat02 ansible_host=ec2-13-51-50-42.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+

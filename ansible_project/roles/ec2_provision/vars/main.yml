@@ -1,0 +1,22 @@
+---
+# vars file for ec2_provision
+security_group_rules:
+  - proto: "tcp"
+    ports: [22]  # Changed from 'port' to 'ports' to use list format
+    cidr_ip: "0.0.0.0/0"  # Changed from 'cidr' to 'cidr_ip'
+    rule_desc: "allow all on ssh port"
+  - proto: "tcp"
+    ports: [80]
+    cidr_ip: "0.0.0.0/0"
+    rule_desc: "Allow all on HTTP port"
+  - proto: "tcp"
+    ports: [443]
+    cidr_ip: "0.0.0.0/0"
+    rule_desc: "Allow all on HTTPS port"
+key_name: my_aws             # Key used for SSH
+region: eu-north-1       # Region may affect response and pricing
+image: ami-03238ca76a3266a07 # look in ec2 > ami (filter owner alias: amazon) or amis of manually launched instances
+id: "example testing"
+instance_type: t3.micro       # Choose instance type on aws
+# vpc_id: subnet-012345
+sec_group: "test-security-group"

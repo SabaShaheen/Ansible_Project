@@ -1,0 +1,80 @@
+# tasks file for mysql_install
+
+- name: Initial setup tasks
+  import_tasks: setup.yml
+  tags:
+    - initial_setup
+
+- block:  # Starting a block to group tasks
+    - name: Prepare Install folder
+      ansible.builtin.shell:
+        cmd: mkdir -p "{{download_folder}}" && cd "{{download_folder}}"
+      become: yes
+      tags:
+        - download_mysql
+
+    - name: Download MySql
+      ansible.builtin.shell:
+        cmd: wget "{{mysql_repo_url}}/{{mysql_rmp}}" -P "{{download_folder}}"
+      become: yes
+      tags:
+        - download_mysql
+      register: download_result  # Register the result of the download task
+
+  rescue:
+    - name: Failed to download MySQL
+      debug:
+        msg: "The download of MySQL has failed. Please check your internet connection and the URL."
+
+- name: Install MySQL repository from local file
+  yum:
+    name: "{{download_folder}}{{mysql_rmp}}"
+    state: present
+  when: download_result is defined and download_result.rc == 0
+  become: yes
+  tags:
+    - install_mysql
+  notify: restart mysql
+
+- name: Configure MySQL
+  ansible.builtin.template:
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+  notify: restart mysql
+  become: yes
+  tags:
+    - mysql_configuration
+  
+- meta: flush_handlers  # Ensure MySQL is restarted before continuing if needed
+
+- name: Start and enable MySQL service
+  ansible.builtin.systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+  become: yes
+  when: download_result.rc == 0
+  tags:
+    - mysql_service
+
+
+- name: Set MySQL root password
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: login_unix_socket
+  ignore_errors: true
+  become: yes
+  tags:
+    - configuration
+  notify: restart mysql
+
+- name: Run initial MySQL setup script
+  ansible.builtin.mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: import
+    target: /tmp/initial_setup.sql
+  tags:
+    - mysql_init

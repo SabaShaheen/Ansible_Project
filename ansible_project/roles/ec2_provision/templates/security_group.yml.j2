@@ -1,0 +1,14 @@
+# templates/security_group.yml.j2
+amazon.aws.ec2_security_group:
+  name: "{{ sec_group }}"
+  description: "Sec group for app"
+  region: "{{ region }}"
+
+  rules:
+    {% for rule in security_rules %}
+    - proto: "{{ rule.proto }}"
+      ports:
+        - "{{ rule.ports}}"
+      cidr_ip: "{{ rule.cidr_ip }}"
+      rule_desc: "{{ rule.rule_desc }}"
+    {% endfor %}

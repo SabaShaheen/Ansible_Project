@@ -1,0 +1,38 @@
+---
+# tasks file for python_venv_setup
+- name: Install Python 3 and necessary packages
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+    state: present
+    update_cache: yes
+
+- name: Create project directory
+  file:
+    path: "{{ project_path }}"
+    state: directory
+    mode: 0755
+
+- name: Create a virtual environment
+  command: python3 -m venv "{{ venv_path }}"
+  args:
+    creates: "{{ venv_path }}/bin/activate"
+
+- name: Install Python packages in the virtual environment
+  pip:
+    name: "{{ item }}"
+    virtualenv: "{{ venv_path }}"
+    virtualenv_command: "{{ venv_path }}/bin/python3 -m venv"
+  loop:
+    - django
+    - djangorestframework
+  become: no  # Use non-privileged user for Python package installation if possible
+
+- name: Run a Python script using the virtual environment
+  command: "{{ venv_path }}/bin/python {{ project_path }}/script.py"
+  args:
+    chdir: "{{ project_path }}"
+  become: no  # Recommended to run Python scripts as non-privileged user if possible
+

@@ -1,0 +1,3 @@
+---
+# defaults file for dns_management
+api_url: "https://dns.google/resolve"

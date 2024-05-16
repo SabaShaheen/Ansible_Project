@@ -1,0 +1,23 @@
+# my.cnf.j2
+[mysqld]
+user = mysql
+pid-file = /var/run/mysqld/mysqld.pid
+socket = /var/run/mysqld/mysqld.sock
+port = 3306
+datadir = /var/lib/mysql
+# Settings for MySQL performance:
+key_buffer_size = {{ mysql_key_buffer_size | default('256M') }}
+max_allowed_packet = {{ mysql_max_allowed_packet | default('64M') }}
+thread_stack = {{ mysql_thread_stack | default('256K') }}
+thread_cache_size = {{ mysql_thread_cache_size | default(8) }}
+query_cache_limit = {{ mysql_query_cache_limit | default('1M') }}
+query_cache_size = {{ mysql_query_cache_size | default('16M') }}
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet = {{ mysql_max_allowed_packet | default('64M') }}
+
+[mysql]
+# mysql configs
+

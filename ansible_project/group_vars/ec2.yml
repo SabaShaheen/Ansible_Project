@@ -1,0 +1,11 @@
+region: eu-north-1       # Region may affect response and pricing
+
+image: ami-03238ca76a3266a07    # look in ec2 > ami (filter owner alias: amazon) or amis of manually launched instances
+
+id: "example testing"
+
+instance_type: t3.micro       # Choose instance type on aws
+
+# vpc_id: subnet-012345
+
+sec_group: "test-security-group"

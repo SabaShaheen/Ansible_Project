@@ -1,0 +1,4 @@
+[DEV]
+dev01 ansible_host=ec2-13-51-45-38.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+dev02 ansible_host=ec2-13-51-46-39.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
+

@@ -1,0 +1,23 @@
+# templates/security_group.yml.j2
+amazon.aws.ec2_security_group:
+  name: "test-security-group"
+  description: "Sec group for app"
+  region: "eu-north-1"
+
+  rules:
+        - proto: "tcp"
+      ports:
+        - "[22]"
+      cidr_ip: "0.0.0.0/0"
+      rule_desc: "allow all on ssh port"
+        - proto: "tcp"
+      ports:
+        - "[80]"
+      cidr_ip: "0.0.0.0/0"
+      rule_desc: "Allow all on HTTP port"
+        - proto: "tcp"
+      ports:
+        - "[443]"
+      cidr_ip: "0.0.0.0/0"
+      rule_desc: "Allow all on HTTPS port"
+    

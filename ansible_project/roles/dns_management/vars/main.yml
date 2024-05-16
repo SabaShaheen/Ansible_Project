@@ -1,0 +1,4 @@
+---
+# vars file for dns_management
+record_name: "dnsrecord1.com"
+record_value: "192.0.2.1"

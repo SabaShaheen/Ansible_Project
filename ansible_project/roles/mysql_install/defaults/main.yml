@@ -1,0 +1,5 @@
+---
+# defaults file for mysql_install
+download_folder: "/home/ec2-user/ansible_project"
+mysql_repo_url: "https://dev.mysql.com/get"
+login_unix_socket: "/var/run/mysqld/mysqld.sock"

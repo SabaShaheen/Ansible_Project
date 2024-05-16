@@ -1,0 +1,6 @@
+---
+# defaults file for python_venv_setup
+
+project_path: "/home/ec2-user/ansible_project"
+venv_path: "{{ project_path }}/venv"
+

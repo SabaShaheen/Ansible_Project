@@ -1,0 +1,52 @@
+---
+- name: Clean yum cache
+  yum:
+    update_cache: yes
+  become: yes
+
+- name: Install necessary OpenSSL libraries
+  yum:
+    name:
+      - openssl-libs
+    state: present
+  become: yes
+  
+
+- name: Import MySQL GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://repo.mysql.com/RPM-GPG-KEY-mysql
+  when: download_result is defined and download_result.rc == 0
+  become: yes
+  
+- name: Attempt to install EPEL Release from default repos
+  yum:
+    name: epel-release
+    state: present
+  ignore_errors: yes
+  register: epel_install
+
+- name: Manually configure the EPEL repository if needed
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/Everything/$basearch/
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-$releasever
+  when: epel_install.failed
+
+- name: Install Python 3 and pip
+  yum:
+    name:
+      - python3
+      - python3-pip
+    state: present
+  become: yes
+
+- name: Install PyMySQL
+  pip:
+    name: pymysql
+    state: present
+  become: yes
+

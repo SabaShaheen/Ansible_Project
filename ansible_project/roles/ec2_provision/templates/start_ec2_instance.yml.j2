@@ -1,0 +1,14 @@
+# templates/start_ec2_instance.yml.j2
+amazon.aws.ec2_instance:
+  name: "{{ instance_name }}"
+  key_name: "{{ key_name }}"
+  instance_type: "{{ instance_type }}"
+  security_group: "{{ sec_group }}"
+  aws_access_key: "{{ ec2_access_key }}"
+  aws_secret_key: "{{ ec2_secret_key }}"
+  region: "{{ region }}"
+  network:
+    assign_public_ip: true
+  image_id: "{{ image }}"
+  tags:
+    Environment: "{{ env }}"

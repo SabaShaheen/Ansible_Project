@@ -1,0 +1,11 @@
+---
+# vars file for mysql_install
+mysql_rmp: "mysql80-community-release-el8-1.noarch.rpm"
+
+mysql_key_buffer_size: "256M"
+mysql_max_allowed_packet: "64M"
+mysql_thread_stack: "256K"
+mysql_thread_cache_size: 8
+mysql_query_cache_limit: "1M"
+mysql_query_cache_size: "16M"
+

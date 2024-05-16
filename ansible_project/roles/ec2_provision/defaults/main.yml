@@ -1,0 +1,6 @@
+---
+# defaults file for ec2_provision
+debug_info_conf: "/home/ec2-user/ansible_project/roles/ec2_provision/files/debug_info_conf.yml"
+instance_start_conf: "/home/ec2-user/ansible_project/roles/ec2_provision/files/instance_start_conf.yml"
+security_group_conf: "/home/ec2-user/ansible_project/roles/ec2_provision/files/security_group_conf.yml" 
+ssh_public_key: ~/.ssh/aws_ssh.pub

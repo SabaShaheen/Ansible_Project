@@ -1,0 +1,35 @@
+---
+- block:
+    - name: Check if DNS record exists
+      dns_record_manager:
+        api_url: "{{ api_url }}"
+        api_key: "{{ api_key }}"
+        record_name: "{{ record_name }}"
+        record_value: "{{ record_value }}"
+      register: dns_check
+      tags: ['never', 'check_dns']
+
+    - name: Display DNS record info if exists
+      debug:
+        msg: >
+          DNS record exists and here are the details:
+          {{ dns_check.dns_record | to_nice_json }}
+      when: dns_check.dns_record is defined and not dns_check.changed
+
+    - name: Create DNS record if it does not exist
+      dns_record_manager:
+        api_url: "{{ api_url }}"
+        api_key: "{{ api_key }}"
+        record_name: "{{ record_name }}"
+        record_value: "{{ record_value }}"
+      when: dns_check.dns_record is none
+      register: dns_check  # Re-register if needed, especially if this task changes anything
+
+    - name: Display new DNS record info if created
+      debug:
+        msg: >
+          New DNS record created:
+          {{ dns_check.dns_record | to_nice_json }}
+      when: dns_check.changed
+  tags:
+    - dns_management
