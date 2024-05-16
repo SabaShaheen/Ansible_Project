@@ -15,7 +15,7 @@
 - name: Import MySQL GPG key
   ansible.builtin.rpm_key:
     state: present
-    key: https://repo.mysql.com/RPM-GPG-KEY-mysql
+    key: "{{rmp_gpg_key}}"
   when: download_result is defined and download_result.rc == 0
   become: yes
   
@@ -30,7 +30,7 @@
   yum_repository:
     name: epel
     description: EPEL YUM repo
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/Everything/$basearch/
+    baseurl: "{{EPEL_baseurl}}"
     enabled: yes
     gpgcheck: yes
     gpgkey: https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-$releasever
