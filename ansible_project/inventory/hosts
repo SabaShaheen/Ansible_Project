@@ -14,3 +14,8 @@ sit02 ansible_host=ec2-13-51-48-41.eu-north-1.compute.amazonaws.com ansible_user
 uat ansible_host=ec2-13-51-49-33.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
 uat02 ansible_host=ec2-13-51-50-42.eu-north-1.compute.amazonaws.com ansible_user=ec2-user
 
+[Lowerenvironments:children]
+DEV
+SIT
+
+
